@@ -14,6 +14,8 @@ password = config.get('Login', 'Password')
 #bot
 user_agent = config.get('Bot', 'UserAgent')
 last_commented = config.getfloat('Bot', 'LastCommented')
+last_inbox = config.getfloat('Bot', 'LastInbox')
+maintainer = config.get('Bot', 'Maintainer')
 
 #settings
 sleep_time = config.getint('Settings', 'SleepTime')
@@ -29,3 +31,11 @@ def set_last_commented(last):
         config.write(configfile)
     global last_commented
     last_commented = last
+
+def set_last_inbox(last):
+    global last_inbox
+    last_string = '%.1f' % last
+    config.set('Bot', 'LastInbox', last_string)
+    with open(FILENAME, 'w') as configfile:
+        config.write(configfile)
+    last_inbox = last
