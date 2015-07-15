@@ -1,43 +1,46 @@
 import time
 import praw
 import goslate
-import configparser
-
-# Configurations
-config = configparser.ConfigParser()
-config.read('config.cfg')
-
-username = config.get('Login', 'Username')
-password = config.get('Login', 'Password')
-
-user_agent = config.get('Bot', 'UserAgent')
-
-limit = config.getint('Settings', 'Limit')  # Number of submissions per iteration
+import config
 
 # Initialize Reddit Praw
-r = praw.Reddit(user_agent=user_agent)
-r.login(username, password)
+r = praw.Reddit(user_agent=config.user_agent)
+r.login(config.username, config.password)
 
 # Initialize translator
 gs = goslate.Goslate()
 
 already_done = []  # list of things that are done
 
-# Debug
-print(username)
-print(password)
-print(user_agent)
-print(limit)
-print(already_done)
+# Main program / loop
 
-# Main loop
+subreddit = r.get_subreddit(config.subreddit_name)
+
 while True:
-    # time.sleep(120)
-    subreddit = r.get_subreddit('russia')
-    for submission in subreddit.get_new(limit=limit):
-        if submission.id not in already_done:
+    print('Gathering new submissions.')
+    last_commented = config.last_commented
+
+    # Turning the list upside down:
+    upside_down = []
+
+    for submission in subreddit.get_new(limit=config.limit):
+        upside_down.append(submission)
+
+    upside_down.reverse()
+
+    for submission in upside_down:
+        if submission.id not in already_done and submission.created_utc > config.last_commented:
+            print('New submission found.')
             language = gs.detect(submission.title)
-            already_done.append(submission.id)
             if language == 'ru':
+                print('Russian language detected. Adding comment...')
                 submission.add_comment(gs.translate(submission.title, 'en'))
-    time.sleep(120)
+                print('Comment added.')
+            else:
+                print('Language other than russian detected.')
+            print('Adding element to already-done-list.')
+            already_done.append(submission.id)
+            last_commented = submission.created_utc
+    config.set_last_commented(last_commented)
+    print('Done with all submissions. Going to sleep.')
+    time.sleep(config.sleep_time)
