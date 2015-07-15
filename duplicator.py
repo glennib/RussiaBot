@@ -12,7 +12,7 @@ targetSub = r.get_subreddit('RussiaBot')
 
 alreadyPosted = []
 
-for submission in targetSub.get_new(limit = 10):
+for submission in targetSub.get_new(limit = 100):
     if submission.is_self:
         alreadyPosted.append(submission.title)
     else:
