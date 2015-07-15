@@ -30,7 +30,7 @@ def forward(message):
     sender = message.author.name
     message_body = 'Sent by: ' + sender + '\n\n---\n\n'
     message_body += message.body
-    r.send_message(config.maintainer, message.subject, message_body)
+    # r.send_message(config.maintainer, message.subject, message_body)
 
 
 def parse_message(message):
@@ -136,7 +136,7 @@ while True:
                 print('Comment added.')  # debug
             else:
                 print('Language other than russian detected.')  # debug
-            print('Adding element to already-done-list.')  # debug
+            # print('Adding element to already-done-list.')  # debug
             # already_done.append(submission.id)
             last_commented = submission.created_utc
     config.set_last_commented(last_commented)
