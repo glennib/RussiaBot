@@ -4,6 +4,7 @@ import goslate
 import config
 import auxiliary
 
+# transfering to heroku
 
 def delete_comment(message):
     submission = r.get_submission(submission_id=message.subject[-6:])
