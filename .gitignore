@@ -1,7 +1,7 @@
+bin/
+env/
+__pycache__/
+
+*.py[cod]
+*$py.class
 .idea/
-config.cfg
-ini.py
-info.txt
-*.pyc
-test_script.py
-duplicator.py
