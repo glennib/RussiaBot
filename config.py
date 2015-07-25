@@ -1,41 +1,24 @@
 # This script gathers password and other stuff from the config file
 
-import configparser
+import os
+import database
 
-FILENAME = 'config.cfg'
-
-config = configparser.ConfigParser()
-config.read(FILENAME)
+# database variables
+last_commented = database.last_commented
+last_inbox = database.last_inbox
 
 #login
-username = config.get('Login', 'Username')
-password = config.get('Login', 'Password')
+username = os.environ['REDDIT_USER'] # bot account username
+password = os.environ['REDDIT_PASSWORD'] # bot account password
 
 #bot
-user_agent = config.get('Bot', 'UserAgent')
-last_commented = config.getfloat('Bot', 'LastCommented')
-last_inbox = config.getfloat('Bot', 'LastInbox')
-maintainer = config.get('Bot', 'Maintainer')
+user_agent = os.environ['REDDIT_USER_AGENT'] # UA string, see bot guidelines for reddit
+maintainer = os.environ['REDDIT_MAINTAINER'] # Maintainer username
 
 #settings
-sleep_time = config.getint('Settings', 'SleepTime')
-limit = config.getint('Settings', 'Limit')  # Number of submissions per iteration
-subreddit_name = config.get('Settings', 'Subreddit')
-source_language = config.get('Settings', 'SourceLanguage')
-target_language = config.get('Settings', 'TargetLanguage')
+sleep_time = int(os.environ['SLEEP_TIME']) # sleep time between pulls
+limit = int(os.environ['SUBMISSION_LIMIT'])  # Number of submissions per iteration
+subreddit_name = os.environ['SUBREDDIT_NAME']
+source_language = os.environ['SOURCE_LANGUAGE']
+target_language = os.environ['TARGET_LANGUAGE']
 
-def set_last_commented(last):
-    last_string = '%.1f' % last
-    config.set('Bot', 'LastCommented', last_string)
-    with open(FILENAME, 'w') as configfile:
-        config.write(configfile)
-    global last_commented
-    last_commented = last
-
-def set_last_inbox(last):
-    global last_inbox
-    last_string = '%.1f' % last
-    config.set('Bot', 'LastInbox', last_string)
-    with open(FILENAME, 'w') as configfile:
-        config.write(configfile)
-    last_inbox = last
