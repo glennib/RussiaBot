@@ -153,9 +153,8 @@ def check_submissions():
                 post_comment(submission)
             else:
                 print('Language other than russian detected.')  # debug
-            # print('Adding element to already-done-list.')  # debug
-            # already_done.append(submission.id)
             last_commented = submission.created_utc
+    print(last_commented)
     config.set_db_setting(config.last_commented, last_commented)
 
 
