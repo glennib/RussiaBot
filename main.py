@@ -60,14 +60,18 @@ def check_inbox():
         messages.append(message)
     messages.reverse()
 
+    last_inbox = config.last_inbox.value
     for message in messages:
-        if message.created_utc > config.last_inbox.value:
+        if message.created_utc > last_inbox:
             print('Unseen message found. Processing...')
             try:
                 parse_message(message)
             except:
                 print('Something happened while trying to process a message in inbox.')
-            config.set_db_setting(config.last_inbox, message.created_utc)
+            last_inbox = message.created_utc
+    print('Writing this to last_inbox database:')
+    print(last_inbox)
+    config.set_db_setting(config.last_inbox, last_inbox)
 
 
 def translated_title(submission):
@@ -145,7 +149,7 @@ def check_submissions():
     upside_down.reverse()
 
     for submission in upside_down:
-        if submission.created_utc > config.last_commented.value:
+        if submission.created_utc > last_commented:
             print('New submission found.')  # debug
             language = gs.detect(submission.title)  # get language
             if language == config.source_language:  # check language
@@ -154,11 +158,14 @@ def check_submissions():
             else:
                 print('Language other than russian detected.')  # debug
             last_commented = submission.created_utc
+    print('Writing this to last_commented, database:')
     print(last_commented)
     config.set_db_setting(config.last_commented, last_commented)
 
 
 # Initialize Reddit Praw
+
+print('Logging into Reddit with\nuser_agent: ' + config.user_agent + '\nUsername: ' + config.username + '\nSubreddit: ' + config.subreddit_name + '\n')
 r = praw.Reddit(user_agent=config.user_agent)
 r.login(config.username, config.password)
 
