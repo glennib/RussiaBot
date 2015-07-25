@@ -1,3 +1,4 @@
+PyMySQL==0.6.6
 futures==3.0.3
 goslate==1.4.0
 peewee==2.6.3
