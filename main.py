@@ -61,13 +61,14 @@ def check_inbox():
     messages.reverse()
 
     for message in messages:
-        if message.created_utc > config.last_inbox:
+        if message.created_utc > config.last_inbox.value:
             print('Unseen message found. Processing...')
             try:
                 parse_message(message)
             except:
                 print('Something happened while trying to process a message in inbox.')
-            config.set_last_inbox(message.created_utc)
+            config.last_inbox.value = float(message.created_utc)
+            config.last_inbox.save()
 
 
 def translated_title(submission):
@@ -134,7 +135,7 @@ def post_comment(submission, translation=''):
     print('Comment added.')  # debug
 
 def check_submissions():
-    last_commented = config.last_commented
+    last_commented = config.last_commented.value
 
     # Turning the list upside down:
     upside_down = []
@@ -145,7 +146,7 @@ def check_submissions():
     upside_down.reverse()
 
     for submission in upside_down:
-        if submission.created_utc > config.last_commented:
+        if submission.created_utc > config.last_commented.value:
             print('New submission found.')  # debug
             language = gs.detect(submission.title)  # get language
             if language == config.source_language:  # check language
@@ -156,7 +157,8 @@ def check_submissions():
             # print('Adding element to already-done-list.')  # debug
             # already_done.append(submission.id)
             last_commented = submission.created_utc
-    config.set_last_commented(last_commented)
+    config.last_commented.value = float(last_commented)
+    config.last_commented.save()
 
 
 # Initialize Reddit Praw
