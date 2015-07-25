@@ -2,6 +2,7 @@
 
 import os
 import database
+from database import set_db_setting
 
 # database variables
 last_commented = database.last_commented

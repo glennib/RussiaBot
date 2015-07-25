@@ -48,3 +48,12 @@ def create_safe_setting(name, value):
 # Create setting_1 if it doesn't exist already
 last_commented = create_safe_setting('last_commented', 0)
 last_inbox = create_safe_setting('last_inbox', 0)
+
+db.close()
+
+
+def set_db_setting(setting, value):
+    db.connect()
+    setting.value = value
+    setting.save()
+    db.close()

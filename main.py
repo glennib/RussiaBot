@@ -67,8 +67,7 @@ def check_inbox():
                 parse_message(message)
             except:
                 print('Something happened while trying to process a message in inbox.')
-            config.last_inbox.value = float(message.created_utc)
-            config.last_inbox.save()
+            config.set_db_setting(config.last_inbox, message.created_utc)
 
 
 def translated_title(submission):
@@ -157,8 +156,7 @@ def check_submissions():
             # print('Adding element to already-done-list.')  # debug
             # already_done.append(submission.id)
             last_commented = submission.created_utc
-    config.last_commented.value = float(last_commented)
-    config.last_commented.save()
+    config.set_db_setting(config.last_commented, last_commented)
 
 
 # Initialize Reddit Praw
