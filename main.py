@@ -155,6 +155,7 @@ def check_submissions():
                 post_comment(submission)
             else:
                 print('Language other than russian detected.')  # debug
+            print('last_commented = submission.created_utc = ' + str(submission.created_utc))
             last_commented = submission.created_utc
             config.set_db_setting(config.last_commented, last_commented)
 
