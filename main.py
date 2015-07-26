@@ -69,9 +69,7 @@ def check_inbox():
             except:
                 print('Something happened while trying to process a message in inbox.')
             last_inbox = message.created_utc
-    print('Writing this to last_inbox database:')
-    print(last_inbox)
-    config.set_db_setting(config.last_inbox, last_inbox)
+            config.set_db_setting(config.last_inbox, last_inbox)
 
 
 def translated_title(submission):
@@ -158,9 +156,7 @@ def check_submissions():
             else:
                 print('Language other than russian detected.')  # debug
             last_commented = submission.created_utc
-    print('Writing this to last_commented, database:')
-    print(last_commented)
-    config.set_db_setting(config.last_commented, last_commented)
+            config.set_db_setting(config.last_commented, last_commented)
 
 
 # Initialize Reddit Praw

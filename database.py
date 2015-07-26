@@ -53,6 +53,7 @@ db.close()
 
 
 def set_db_setting(setting, value):
+    print('Writing ' + str(setting.value) + 'to ' + setting.name + ' in database.')
     db.connect()
     setting.value = value
     setting.save()
