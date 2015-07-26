@@ -10,7 +10,8 @@ db = MySQLDatabase(dbname, host=url.hostname, user=url.username, passwd=url.pass
 
 class Setting(Model):
     name = CharField(index=True, unique=True)
-    value = FloatField()
+    #value = FloatField()
+    value = DoubleField()
 
     class Meta:
         database = db
@@ -53,7 +54,7 @@ db.close()
 
 
 def set_db_setting(setting, value):
-    print('Writing ' + str(setting.value) + 'to ' + setting.name + ' in database.')
+    print('Writing ' + str(setting.value) + ' to ' + setting.name + ' in database.')
     db.connect()
     setting.value = value
     setting.save()
