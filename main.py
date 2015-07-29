@@ -93,7 +93,7 @@ def append_title(submission, translation=''):
 def append_translation_link(submission):
     global _current_comment
     _current_comment += '\n\n'
-    url = 'https://translate.google.com/translate?hl=en&sl=auto&tl=en&u='
+    url = 'https://translate.google.com/translate?hl=en&sl=' + config.source_language + '&tl=en&u='
     url += submission.url
     _current_comment += auxiliary.create_url('Read webpage with Google Translate', url)
     _current_comment += '.'
