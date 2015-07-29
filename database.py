@@ -2,15 +2,30 @@ from peewee import *
 import urllib.parse
 import os
 
-url = urllib.parse.urlparse(os.getenv('CLEARDB_DATABASE_URL'))
-dbname = url.path[1:]
+database_url = ''
+db = None # For broadening the scope of DB
 
-db = MySQLDatabase(dbname, host=url.hostname, user=url.username, passwd=url.password)
+local_app = False
+
+try:
+    database_url = os.environ['CLEARDB_DATABASE_URL']
+except:
+    local_app = True
+
+if not local_app:
+    print('CLEARDB_DATABASE_URL found. Assuming Heroku app.')
+    url = urllib.parse.urlparse(os.getenv('CLEARDB_DATABASE_URL'))
+    dbname = url.path[1:]
+
+    db = MySQLDatabase(dbname, host=url.hostname, user=url.username, passwd=url.password)
+else:
+    print('CLEARDB_DATABASE_URL not found. Assuming local operation. '
+          'Reading config info from local file. Also creating local DB.')
+    db = SqliteDatabase('russiabot.db')
 
 
 class Setting(Model):
     name = CharField(index=True, unique=True)
-    #value = FloatField()
     value = DoubleField()
 
     class Meta:
