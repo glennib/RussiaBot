@@ -1,6 +1,7 @@
 from peewee import *
 import urllib.parse
 import os
+from pprint import pprint
 
 database_url = ''
 db = None # For broadening the scope of DB
@@ -31,6 +32,13 @@ class Setting(Model):
     class Meta:
         database = db
 
+class IgnoredUser(Model):
+    username = CharField(index=True, unique=True)
+    timestamp = DateTimeField()
+
+    class Meta:
+        database = db
+
 
 db.connect()
 
@@ -41,6 +49,13 @@ if 'setting' not in db.get_tables():
     print('Setting table not found. Created.')
 else:
     print('Setting table exists. Do nothing.')
+
+# Create IgnoredUser table if it doesn't exist already
+if 'ignoreduser' not in db.get_tables():
+    db.create_table(IgnoredUser)
+    print('IgnoredUser table not found. Created.')
+else:
+    print('IgnoredUser table exists. Do nothing.')
 
 # Delete if true
 if False:
@@ -65,6 +80,7 @@ def create_safe_setting(name, value):
 last_commented = create_safe_setting('last_commented', 0)
 last_inbox = create_safe_setting('last_inbox', 0)
 
+db.commit()
 db.close()
 
 
@@ -74,3 +90,11 @@ def set_db_setting(setting, value):
     setting.value = value
     setting.save()
     db.close()
+
+def get_ignored_users():
+    db.connect()
+    ignored_users = []
+    for ignored_user in IgnoredUser.select():
+        ignored_users.append(ignored_user.username)
+    db.close()
+    return ignored_users

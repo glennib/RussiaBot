@@ -8,6 +8,8 @@ from database import set_db_setting
 last_commented = database.last_commented
 last_inbox = database.last_inbox
 
+ignored_users = database.get_ignored_users()
+
 username = None
 password = None
 user_agent = None

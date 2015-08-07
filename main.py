@@ -4,7 +4,11 @@ import goslate
 import config
 import auxiliary
 
-# transfering to heroku
+import time
+
+# print('Going to sleep for 600 seconds.')
+# time.sleep(600)
+# print('Back from sleep.')
 
 def delete_comment(message):
     submission = r.get_submission(submission_id=message.subject[-6:])
@@ -151,8 +155,11 @@ def check_submissions():
             print('New submission found.')  # debug
             language = gs.detect(submission.title)  # get language
             if language == config.source_language:  # check language
-                print('Russian language detected. Adding comment...')  # debug
-                post_comment(submission)
+                if submission.author not in config.ignored_users:
+                    print('Russian language detected. Adding comment...')  # debug
+                    post_comment(submission)
+                else:
+                    print('Russian language detected, but author has requested to be ignored.')
             else:
                 print('Language other than russian detected.')  # debug
             print('last_commented = submission.created_utc = ' + str(submission.created_utc))
